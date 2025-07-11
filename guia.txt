@@ -1,0 +1,148 @@
+sistema de archivos
+/repuestos-backend
+├── /config
+│   └── db.js              # Configuración y conexión a la base de datos (MySQL)
+├── /node_modules          # Carpeta generada automáticamente con las dependencias del proyecto
+├── .env                   # Archivo de variables de entorno - NO se sube al repositorio
+├── app.js  o server.js    # Archivo principal: inicializa Express, middlewares, rutas y servidor
+├── package-lock.json      # Archivo generado por npm que asegura versiones consistentes de dependencias
+└── package.json           # Metadatos del proyecto: nombre, versión, scripts, dependencias, etc.
+
+express: Para construir servidores web/APIs REST fácilmente.
+mysql2: Conexión y consultas a una base de datos MySQL desde Node.js.
+cors: Middleware que permite manejar políticas de CORS entre frontend y backend.
+dotenv: Carga variables de entorno desde .env.
+nodemon: Herramienta de desarrollo que reinicia automáticamente el servidor cuando detecta cambios.
+
+Paso 1)
+    npm init -y
+    npm install express mysql2 cors dotenv
+    npm install --save-dev nodemon
+
+Paso 2)
+    Configuración inicial de Express
+
+    Crea app.js con este contenido mínimo:
+
+    const express = require('express');
+    const cors = require('cors');
+
+    const app = express();
+    const PORT = process.env.PORT || 3000;
+
+    // Middlewares
+    app.use(cors()); // Habilita CORS para todas las solicitudes
+    app.use(express.json()); // Parsea cuerpos JSON en peticiones
+
+    // Ruta de prueba
+    app.get('/', (req, res) => {
+        res.send('¡Servidor funcionando correctamente!');
+    });
+
+    // Iniciar servidor
+    app.listen(PORT, () => {
+        console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    });
+
+
+Prueba: 
+    node app.js
+
+
+
+Visita http://localhost:3000 en tu navegador. Deberías ver el mensaje.
+
+Paso 3) 
+    Configurar scripts y nodemon
+    En package.json, añade:
+
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon app.js"
+    }
+
+    Salir con control c y aplicar 
+        npm run dev
+
+    Verifica que el servidor se reinicie automáticamente al hacer cambios.
+
+
+Paso 4) 
+    Conexión a MySQL
+
+    a) Crea config/db.js:
+
+        const mysql = require('mysql2/promise');
+        require('dotenv').config();
+
+        const pool = mysql.createPool({
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME || 'dbjuegos',
+        waitForConnections: true,
+        connectionLimit: 10
+        });
+
+        module.exports = pool;
+
+    b) Crea .env:
+
+        DB_HOST=localhost
+        DB_USER=root
+        DB_PASSWORD=
+        DB_NAME=dbjuegos
+
+    c) Modifica app.js para probar la conexión:
+
+        const db = require('./config/db');
+
+        // ... después de app.listen ...
+        db.getConnection()
+        .then(conn => {
+            console.log('Conexión a MySQL exitosa!');
+            conn.release();
+        })
+        .catch(err => {
+            console.error('Error de conexión a MySQL:', err);
+        });
+
+
+        Prueba: Reinicia el servidor y verifica que ves el mensaje de conexión exitosa.
+        control c y npm run dev
+
+
+    Paso 5)
+        Primera ruta con base de datos dbjuegos
+        Añade esta ruta a app.js:
+
+        app.get('/generos', async (req, res) => {
+            try {
+                const [rows] = await db.query('SELECT * FROM generos');
+                res.json(rows);
+            } catch (err) {
+                res.status(500).json({ error: err.message });
+            }
+        });
+
+        app.get('/plataformas', async (req, res) => {
+            try {
+                const [rows] = await db.query('SELECT * FROM plataformas');
+                res.json(rows);
+            } catch (err) {
+                res.status(500).json({ error: err.message });
+            }
+        });
+
+        app.get('/juegos', async (req, res) => {
+            try {
+                const [rows] = await db.query('SELECT * FROM juegos');
+                res.json(rows);
+            } catch (err) {
+                res.status(500).json({ error: err.message });
+            }
+        });
+
+
+
+
