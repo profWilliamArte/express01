@@ -24,25 +24,21 @@ Paso 2)
 
     Crea app.js con este contenido mínimo:
 
-    const express = require('express');
-    const cors = require('cors');
-
-    const app = express();
-    const PORT = process.env.PORT || 3000;
-
-    // Middlewares
-    app.use(cors()); // Habilita CORS para todas las solicitudes
-    app.use(express.json()); // Parsea cuerpos JSON en peticiones
-
-    // Ruta de prueba
-    app.get('/', (req, res) => {
-        res.send('¡Servidor funcionando correctamente!');
-    });
-
-    // Iniciar servidor
-    app.listen(PORT, () => {
-        console.log(`Servidor corriendo en http://localhost:${PORT}`);
-    });
+            const express = require('express');
+            const cors = require('cors');
+            const app = express();
+            const PORT = process.env.PORT || 3000;
+            // Middlewares
+            app.use(cors()); // Habilita CORS para todas las solicitudes
+            app.use(express.json()); // Parsea cuerpos JSON en peticiones
+            // Ruta de prueba
+            app.get('/', (req, res) => {
+                res.send('¡Servidor funcionando correctamente!');
+            });
+            // Iniciar servidor
+            app.listen(PORT, () => {
+                console.log(`Servidor corriendo en http://localhost:${PORT}`);
+            });
 
 
 Prueba: 
@@ -51,6 +47,8 @@ Prueba:
 
 
 Visita http://localhost:3000 en tu navegador. Deberías ver el mensaje.
+
+
 
 Paso 3) 
     Configurar scripts y nodemon
@@ -76,14 +74,13 @@ Paso 4)
         require('dotenv').config();
 
         const pool = mysql.createPool({
-        host: process.env.DB_HOST || 'localhost',
-        user: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || '',
-        database: process.env.DB_NAME || 'dbjuegos',
-        waitForConnections: true,
-        connectionLimit: 10
+            host: process.env.DB_HOST || 'localhost',
+            user: process.env.DB_USER || 'root',
+            password: process.env.DB_PASSWORD || '',
+            database: process.env.DB_NAME || 'dbjuegos',
+            waitForConnections: true,
+            connectionLimit: 10
         });
-
         module.exports = pool;
 
     b) Crea .env:
@@ -109,13 +106,13 @@ Paso 4)
 
 
         Prueba: Reinicia el servidor y verifica que ves el mensaje de conexión exitosa.
+
         control c y npm run dev
 
 
-    Paso 5)
-        Primera ruta con base de datos dbjuegos
-        Añade esta ruta a app.js:
-
+Paso 5)
+    crear las rutas dentro de app.js
+    
         app.get('/generos', async (req, res) => {
             try {
                 const [rows] = await db.query('SELECT * FROM generos');
