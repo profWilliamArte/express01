@@ -5,6 +5,17 @@
 Este proyecto sigue una estructura inicial simple, ideal para comprender los conceptos básicos [1]. Para una estructura más avanzada y escalable, puedes consultar el repositorio `express02` [2].
 
 ## 🚀 Ruta de Aprendizaje
+```
+sistema de archivos
+/repuestos-backend
+├── /config
+│   └── db.js              # Configuración y conexión a la base de datos (MySQL)
+├── /node_modules          # Carpeta generada automáticamente con las dependencias del proyecto
+├── .env                   # Archivo de variables de entorno - NO se sube al repositorio
+├── app.js  o server.js    # Archivo principal: inicializa Express, middlewares, rutas y servidor
+├── package-lock.json      # Archivo generado por npm que asegura versiones consistentes de dependencias
+└── package.json           # Metadatos del proyecto: nombre, versión, scripts, dependencias, etc.
+```
 
 Seguiremos 5 pasos clave para construir nuestro backend desde cero.
 
