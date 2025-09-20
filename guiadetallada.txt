@@ -1,0 +1,70 @@
+Guía Detallada: Creación de una API con Node.js, Express y MySQL
+1. Inicio Rápido del Proyecto
+Al iniciar un proyecto Node.js, el archivo package.json es fundamental, pues actúa como el centro de control para tu aplicación. Cuando ejecutas:
+
+bash
+npm init -y
+Se crea este archivo automáticamente con la configuración básica, facilitando la instalación y gestión de paquetes o librerías. Aquí se almacenarán las dependencias y scripts ejecutables, además de detalles como nombre y versión del proyecto.
+
+Herramientas esenciales instaladas:
+Express:
+Es un framework minimalista y flexible para construir aplicaciones web y APIs en Node.js. Facilita la ruta de peticiones, manejo de middlewares, y gestión del servidor de forma sencilla y poderosa. Usar Express evita escribir código repetitivo para tareas comunes del servidor.
+
+mysql2:
+Esta librería permite que tu aplicación se comunique con una base de datos MySQL. Usa promesas y un pool de conexiones eficiente, lo que mejora el rendimiento y el manejo concurrente de consultas.
+
+cors:
+Significa Cross-Origin Resource Sharing. Es un middleware que permite que tu backend acepte peticiones desde otros orígenes (como un frontend alojado en otro servidor o puerto). Sin CORS, el navegador bloquea esas solicitudes por razones de seguridad.
+
+dotenv:
+Permite cargar variables de entorno desde un archivo .env. Así gestionas datos sensibles (como contraseñas) sin exponerlos en el código. Esto hace tu app más segura y fácil de configurar en distintos ambientes (desarrollo, producción).
+
+nodemon (dev dependency):
+Es una herramienta de desarrollo que observa cambios en los archivos y reinicia automáticamente el servidor. Esto mejora la productividad porque no hace falta detener y arrancar el servidor manualmente cada vez que hagas una modificación.
+
+2. Levantando el Servidor
+El archivo app.js contiene la lógica principal del servidor en Express.
+
+Middlewares: Son funciones que se ejecutan en la secuencia de la petición/respuesta. Por ejemplo,
+
+cors() habilita el manejo de cabeceras para que cualquier frontend pueda consumir los datos.
+
+express.json() convierte automáticamente el cuerpo de las peticiones JSON en objetos de JavaScript que puedes manipular.
+
+Rutas: Definen puntos de acceso donde el servidor responde a las peticiones HTTP. La ruta raíz "/" con un res.send() simple es útil para comprobar que el servidor está encendido y escuchando.
+
+Para arrancar el servidor, app.listen(PORT) abre un puerto de escucha, comunicando la URL donde estará disponible la API.
+
+3. Desarrollo Más Ágil con Nodemon
+Cuando programas, continuamente guardas archivos. Sin nodemon, debes detener el servidor manualmente (Ctrl+C) y luego ejecutarlo de nuevo para que tome los cambios.
+
+Al agregar un script especial en package.json:
+
+json
+"scripts": {
+  "start": "node app.js",
+  "dev": "nodemon app.js"
+}
+Puedes lanzar el servidor con npm run dev, donde nodemon detecta cambios y recarga automáticamente el servidor, acelerando el desarrollo y depuración.
+
+4. Configuración de la Base de Datos MySQL
+Para conectar con MySQL:
+
+Se usa mysql2/promise para trabajar con promesas, permitiendo escribir código asíncrono más limpio con async/await.
+
+En config/db.js se crea un pool de conexiones, una técnica para reutilizar conexiones abiertas a la base de datos. Esto evita abrir y cerrar conexiones constantemente, mejorando el rendimiento y escalabilidad, especialmente para aplicaciones que reciben muchas peticiones simultáneas.
+
+Las credenciales (host, usuario, contraseña, nombre de la BD) van en un archivo .env protegido. Esto previene exponer contraseñas en el repositorio público. En producción, estas variables se configuran en el entorno, distinto de desarrollo.
+
+Validar la conexión en el arranque del servidor ayuda a detectar temprano problemas con la base de datos y evitar errores en la API.
+
+5. Creación de Endpoints
+Crear rutas específicas (endpoints) es cómo defines la estructura que el cliente (por ejemplo, una app web) usará para pedir datos.
+
+Cada ruta corresponde a una consulta SQL que realiza una acción específica (por ejemplo, obtener todos los géneros o juegos).
+
+Usar async/await con try/catch permite manejar errores de forma limpia y enviar respuestas claras cuando algo falla.
+
+El formato de respuesta es JSON, estándar para APIs RESTful, fácil de consumir por frontends modernos.
+
+Organizar estas rutas bien y dividir la lógica en controladores o módulos distintos es buena práctica cuando el proyecto crezca.
