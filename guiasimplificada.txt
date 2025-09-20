@@ -1,0 +1,32 @@
+Guía Básica para Crear una API con Node.js, Express y MySQL
+1. Inicio Rápido del Proyecto
+Crea un nuevo proyecto con npm init -y para generar el archivo que administra las dependencias.
+
+Instala las herramientas esenciales: Express como servidor, mysql2 para comunicación con la base de datos, cors para permitir consultas externas, dotenv para manejar variables sensibles, y nodemon para desarrollo activo.
+
+2. Levantando el Servidor
+Crea un archivo app.js donde configurarás Express para manejar peticiones.
+
+Usa middlewares para habilitar CORS y para que el servidor pueda procesar JSON.
+
+Define una ruta base "/" que devuelva un mensaje simple para confirmar que el servidor funciona.
+
+Arranca el servidor usando node app.js y verifica en el navegador que responda correctamente.
+
+3. Desarrollo Más Ágil
+En package.json, añade un script para desarrollo que use nodemon y reinicie automáticamente el servidor al detectar cambios.
+
+Usa npm run dev para ejecutar el servidor con esta mejora, que optimiza tu flujo de trabajo.
+
+4. Configurando la Base de Datos
+Crea una carpeta config y un archivo db.js para manejar la conexión con la base de datos usando un pool de conexiones para más eficiencia.
+
+Usa variables de entorno con .env para guardar tus credenciales de forma segura, nunca las subas a GitHub.
+
+Modifica app.js para probar que la conexión a MySQL funciona al iniciar el servidor.
+
+5. Creación de Endpoints
+En app.js, crea rutas para que el cliente pueda obtener datos de las tablas principales de tu base de datos, cada endpoint con su respectiva consulta SQL.
+
+Maneja errores enviando una respuesta adecuada si algo falla.
+
